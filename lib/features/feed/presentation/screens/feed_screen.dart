@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../providers/feed_providers.dart';
 import '../widgets/feed_list.dart';
 import '../widgets/shimmer_loader.dart';
 
-/// The main feed screen displaying an infinite-scrolling list of posts.
 class FeedScreen extends ConsumerWidget {
   const FeedScreen({super.key});
 
@@ -15,9 +15,7 @@ class FeedScreen extends ConsumerWidget {
     final feedState = ref.watch(feedControllerProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.scaffoldDark,
       appBar: AppBar(
-        backgroundColor: AppColors.cardDark,
         elevation: 0,
         centerTitle: false,
         title: Column(
@@ -58,12 +56,25 @@ class FeedScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_none_rounded),
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('No notifications yet')),
+              );
+            },
             splashRadius: 28,
           ),
           IconButton(
             icon: const Icon(Icons.message_outlined),
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('No messages yet')),
+              );
+            },
+            splashRadius: 28,
+          ),
+          IconButton(
+            icon: const Icon(Icons.person_outline_rounded),
+            onPressed: () => context.push('/profile'),
             splashRadius: 28,
           ),
           const SizedBox(width: 8),

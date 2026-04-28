@@ -30,7 +30,7 @@ class PostCard extends ConsumerWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
         decoration: BoxDecoration(
-          color: AppColors.cardDark,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
               color: AppColors.shadowDark.withValues(alpha: 0.4),
@@ -98,13 +98,11 @@ class PostCard extends ConsumerWidget {
                   'Social Creator',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
                       ),
                 ),
                 Text(
                   time,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textTertiary,
                         fontSize: 12,
                       ),
                 ),
@@ -114,7 +112,7 @@ class PostCard extends ConsumerWidget {
 
           // ── More Options ──
           IconButton(
-            icon: const Icon(Icons.more_vert, color: AppColors.textSecondary),
+            icon: const Icon(Icons.more_vert),
             iconSize: 20,
             onPressed: () {},
             splashRadius: 20,
@@ -174,22 +172,19 @@ class PostCard extends ConsumerWidget {
 
   Widget _buildEngagementSection(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // ── Left Actions: Like, Comment, Share ──
-          SizedBox(
-            width: 120,
+          Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                // Like Button
                 Transform.scale(
-                  scale: 1.1,
+                  scale: 1.0,
                   child: LikeButton(
                     isLiked: post.isLiked,
-                    likeCount: 0, // Don't show count in compact view
+                    likeCount: post.likeCount,
                     onTap: () {
                       ref.read(feedControllerProvider.notifier).toggleLike(
                         post.id,
@@ -202,39 +197,45 @@ class PostCard extends ConsumerWidget {
                     },
                   ),
                 ),
-                const SizedBox(width: 12),
-
-                // Comment Button
+                SizedBox(width: 4),
                 IconButton(
                   icon: const Icon(
                     Icons.chat_bubble_outline_rounded,
-                    color: AppColors.textSecondary,
-                    size: 24,
+                    size: 22,
                   ),
-                  onPressed: () {},
-                  splashRadius: 24,
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Comments coming soon!')),
+                    );
+                  },
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(
+                    minWidth: 40,
+                    minHeight: 40,
+                  ),
                 ),
-                const SizedBox(width: 8),
-
-                // Share Button
                 IconButton(
                   icon: const Icon(
                     Icons.send_outlined,
-                    color: AppColors.textSecondary,
-                    size: 22,
+                    size: 20,
                   ),
-                  onPressed: () {},
-                  splashRadius: 24,
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Share via...')),
+                    );
+                  },
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(
+                    minWidth: 40,
+                    minHeight: 40,
+                  ),
                 ),
               ],
             ),
           ),
-
-          // ── Right Action: Bookmark ──
           IconButton(
             icon: const Icon(
               Icons.bookmark_outline_rounded,
-              color: AppColors.textSecondary,
               size: 24,
             ),
             onPressed: () {},
@@ -263,7 +264,6 @@ class PostCard extends ConsumerWidget {
                       '${post.likeCount} likes',
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary,
                           ),
                     ),
                   ),
@@ -277,7 +277,6 @@ class PostCard extends ConsumerWidget {
           Text(
             'Amazing moment captured! 📸✨',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.textPrimary,
                   height: 1.4,
                 ),
             maxLines: 2,
@@ -289,9 +288,7 @@ class PostCard extends ConsumerWidget {
             padding: const EdgeInsets.only(top: 8),
             child: Text(
               'View all 124 comments',
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: AppColors.textTertiary,
-                  ),
+              style: Theme.of(context).textTheme.labelSmall,
             ),
           ),
 
@@ -301,7 +298,6 @@ class PostCard extends ConsumerWidget {
             child: Text(
               _formatDate(post.createdAt),
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: AppColors.textTertiary,
                     fontSize: 11,
                   ),
             ),

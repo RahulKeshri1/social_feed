@@ -23,7 +23,6 @@ class DetailScreen extends ConsumerWidget {
     final livePost = feedState.posts.where((p) => p.id == post.id).firstOrNull ?? post;
 
     return Scaffold(
-      backgroundColor: AppColors.scaffoldDark,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -45,7 +44,7 @@ class DetailScreen extends ConsumerWidget {
           SliverAppBar(
             expandedHeight: MediaQuery.of(context).size.height * 0.55,
             pinned: false,
-            backgroundColor: AppColors.scaffoldDark,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
                 tag: 'post-${post.id}',
@@ -69,7 +68,7 @@ class DetailScreen extends ConsumerWidget {
                             end: Alignment.bottomCenter,
                             colors: [
                               Colors.transparent,
-                              AppColors.scaffoldDark.withValues(alpha: 0.9),
+                              Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.9),
                             ],
                           ),
                         ),
@@ -123,16 +122,16 @@ class DetailScreen extends ConsumerWidget {
         onTap: () => Navigator.of(context).pop(),
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.scaffoldDark.withValues(alpha: 0.8),
+            color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.8),
             shape: BoxShape.circle,
             border: Border.all(
-              color: AppColors.textTertiary.withValues(alpha: 0.2),
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.2) ?? Colors.grey.withValues(alpha: 0.2),
             ),
           ),
           padding: const EdgeInsets.all(8),
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_ios_new_rounded,
-            color: AppColors.textPrimary,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
             size: 18,
           ),
         ),
@@ -172,9 +171,7 @@ class DetailScreen extends ConsumerWidget {
               ),
               Text(
                 'Followed by 12.5K',
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: AppColors.textTertiary,
-                    ),
+                style: Theme.of(context).textTheme.labelSmall,
               ),
             ],
           ),
@@ -205,7 +202,6 @@ class DetailScreen extends ConsumerWidget {
         Text(
           'Amazing moment captured! 📸✨ This is where the post caption goes with hashtags and mentions.',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.textPrimary,
                 height: 1.5,
               ),
         ),
@@ -240,7 +236,7 @@ class DetailScreen extends ConsumerWidget {
         _buildEngagementButton(
           icon: livePost.isLiked ? Icons.favorite_rounded : Icons.favorite_outline_rounded,
           label: '${livePost.likeCount}',
-          color: livePost.isLiked ? AppColors.liked : AppColors.textSecondary,
+          color: livePost.isLiked ? AppColors.liked : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.grey),
           onTap: () {
             ref.read(feedControllerProvider.notifier).toggleLike(
               livePost.id,
