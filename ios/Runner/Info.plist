@@ -66,5 +66,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-</dict>
-</plist>
+        <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>We need photo library access to save post images to your camera roll.</string>

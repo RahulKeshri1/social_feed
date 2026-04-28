@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:gal/gal.dart';
 
 import '../../../../app/theme/app_colors.dart';
 
@@ -47,10 +48,22 @@ class _DownloadButtonState extends State<DownloadButton> {
         }
       }
 
-      final dir = await getApplicationDocumentsDirectory();
+      // Check permission before proceeding
+      final hasAccess = await Gal.hasAccess();
+      if (!hasAccess) {
+        final accessGranted = await Gal.requestAccess();
+        if (!accessGranted) {
+          throw 'User denied gallery access';
+        }
+      }
+
+      final dir = await getTemporaryDirectory();
       final fname = 'img_${DateTime.now().millisecondsSinceEpoch}.jpg';
       final f = File('${dir.path}/$fname');
       await f.writeAsBytes(buf);
+
+      // Save it to actual gallery
+      await Gal.putImage(f.path);
 
       if (mounted) {
         setState(() => _state = _DownloadState.done);
